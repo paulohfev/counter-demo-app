@@ -1,0 +1,12 @@
+.count-header {
+  padding: 20px;
+  text-align: center;
+}
+
+.count-value {
+  margin: 70px 0 0;   
+}
+
+.buttons-list > button:not(:last-of-type) {
+  margin-right: 20px;
+}
