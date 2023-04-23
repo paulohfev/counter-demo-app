@@ -1,7 +1,7 @@
-import { render, fireEvent, screen } from "@testing-library/react";
+import { render, fireEvent, act } from "@testing-library/react";
 import Counter from ".";
 
-describe(Counter, () => {
+describe('Counter Actions', () => {
   it("should display the correct initial count", () => {
     const { getByTestId } = render(<Counter initialCount={0} />);
     const countValue = Number(getByTestId("count").textContent);
@@ -42,5 +42,43 @@ describe(Counter, () => {
     fireEvent.click(switchButton);
     const newCountValue = Number(getByTestId("count").textContent);
     expect(newCountValue).toEqual(-10);
-  })
+  });
+});
+
+describe('Counter error handling', () => {
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+
+  it("should not invert the sign of the value if the current count is 0", () => {
+    const { getByTestId, getByRole } = render(<Counter initialCount={0} />);
+    const switchButton = getByRole("button", { name: "Switch Signs" });
+
+    fireEvent.click(switchButton);
+    const currentValue = Number(getByTestId("count").textContent);
+    expect(currentValue).toEqual(0);
+  });
+
+  it("should display an error message if the user tries to invert 0", () => {
+    const { getByTestId, getByRole } = render(<Counter initialCount={0} />);
+    const switchButton = getByRole("button", { name: "Switch Signs" });
+
+    fireEvent.click(switchButton);
+
+    const errorMessage = getByTestId("error");
+    expect(errorMessage).toBeInTheDocument();
+  });
+
+  it("should remove the error message after 1.2 seconds", async () => {
+    const { getByRole, getByTestId } = render(<Counter initialCount={0} />);
+    const switchButton = getByRole("button", { name: "Switch Signs" });
+
+    fireEvent.click(switchButton);
+
+    const errorMessage = getByTestId("error");
+    expect(errorMessage).toBeInTheDocument();
+
+    act(() => jest.advanceTimersByTime(1200));
+    expect(errorMessage).not.toBeInTheDocument();
+  });
 });

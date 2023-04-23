@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '../Button';
 import './Counter.css';
 
@@ -8,25 +8,36 @@ type Props = {
 
 const Counter: React.FC<Props> = ({ initialCount }) => {
   const [count, setCount] = useState(initialCount);
+  const [hasError, setHasError] = useState(false);
 
-  const increment = () => {
-    setCount((prev) => prev + 1);
-  };
+  useEffect(() => {
+    if (hasError) {
+      setTimeout(() => {
+        setHasError(false);
+      }, 1200);
+    }
+  }, [hasError]);
 
-  const decrement = () => {
-    setCount((prev) => prev -1);
-  };
+  const increment = () => setCount((prev) => prev + 1);
 
-  const restart = () => {
-    setCount(0);
-  };
+  const decrement = () => setCount((prev) => prev -1);
+
+  const restart = () => setCount(0);
 
   const switchSigns = () => {
-    setCount((prev) => prev * -1);
+    if (count === 0) {
+      setHasError(true);
+    } else {
+      setCount((prev) => prev * -1);
+      setHasError(false);
+    }
   };
 
   return (
-    <div>
+    <div className="container">
+
+      {hasError && <span data-testid="error" className="warning">You cannot change 0 into a negative value</span>}
+
       <h1 className="count-header">
         Count: <span data-testid="count" className="count-value">{count}</span>
       </h1>
