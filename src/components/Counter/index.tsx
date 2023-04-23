@@ -28,14 +28,14 @@ const Counter: React.FC<Props> = ({ initialCount }) => {
   return (
     <div>
       <h1 className="count-header">
-        Count: <h3 className="count-value">{count}</h3>
+        Count: <span data-testid="count" className="count-value">{count}</span>
       </h1>
 
       <div className="buttons-list">
-        <Button onClick={() => increment()} text={'Increment +'} />
-        <Button onClick={() => decrement()} text={'Decrement -'} />
-        <Button onClick={() => restart()} text={'Restart'} />
-        <Button onClick={() => switchSigns()} text={'Switch Signs'} />
+        <Button onClick={() => increment()} text="Increment" />
+        <Button onClick={() => decrement()} text="Decrement" />
+        <Button onClick={() => restart()} text="Restart" />
+        <Button onClick={() => switchSigns()} text="Switch Signs" />
       </div>
     </div>
   );
